@@ -1,5 +1,6 @@
 import re
 import pandas as pd
+import spacy
 
 
 # Function to extract "e-mail" from dataframe column
@@ -40,3 +41,16 @@ def extract_company_from_column(df, df_column):
     
     return df
 
+
+# Function to display basic entity information
+# Input:
+#      * NLP document
+# Output:
+#      * No output
+#      * Shows on screen basic entity information
+def show_entities(document):
+    if document.ents:
+        for ent in document.ents:
+            print(ent.text+' - '+ent.label_+' - '+str(spacy.explain(ent.label_)))
+    else:
+        print('No named entities found.')
