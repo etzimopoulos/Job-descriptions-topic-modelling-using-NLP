@@ -54,3 +54,29 @@ def show_entities(document):
             print(ent.text+' - '+ent.label_+' - '+str(spacy.explain(ent.label_)))
     else:
         print('No named entities found.')
+
+        
+
+# Author: Olivier Grisel <olivier.grisel@ensta.org>
+#         Lars Buitinck
+#         Chyi-Kwei Yau <chyikwei.yau@gmail.com>
+# License: BSD 3 clause
+# 
+# Function to print out the "n" top words in a topic
+# Input:
+#        * NLP model
+#        * Feature names
+#        * Number of top words in a topic
+# Output:
+#        * Prints on screen top n words per topic
+def print_top_words(model, feature_names, n_top_words):
+    for topic_idx, topic in enumerate(model.components_):
+        message = "Topic #%d: " % topic_idx
+        message += " ".join([feature_names[i]
+                             for i in topic.argsort()[:-n_top_words - 1:-1]])
+        print(message)
+    print()
+        
+
+       
+
