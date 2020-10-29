@@ -1,7 +1,8 @@
 import re
 import pandas as pd
 import spacy
-
+from io import StringIO
+from html.parser import HTMLParser
 
 # Function to extract "e-mail" from dataframe column
 # Input: 
@@ -20,6 +21,7 @@ def extract_email_from_column(df, df_column):
     df['Email'] = pd.DataFrame(info)
     
     return df
+
 
 # Function to extract "company name" from "E-mail" dataframe column
 # Input: 
@@ -56,7 +58,6 @@ def show_entities(document):
         print('No named entities found.')
 
         
-
 # Author: Olivier Grisel <olivier.grisel@ensta.org>
 #         Lars Buitinck
 #         Chyi-Kwei Yau <chyikwei.yau@gmail.com>
@@ -77,6 +78,48 @@ def print_top_words(model, feature_names, n_top_words):
         print(message)
     print()
         
+        
 
-       
+# Source code from following link
+# https://stackoverflow.com/questions/753052/strip-html-from-strings-in-python
+class MLStripper(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.reset()
+        self.strict = False
+        self.convert_charrefs= True
+        self.text = StringIO()
+    def handle_data(self, d):
+        self.text.write(d)
+    def get_data(self):
+        return self.text.getvalue()
 
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
+
+
+# Function to remove HTML tags, "\\r" and "\xa0" from dataframe column
+# Input: 
+#     * Dataframe "df" 
+#     * Column "df_column" to extract company name from  
+# Output: Enriched dataframe with addional column labelled "JD"
+#
+# Alternative Regex
+# import re
+# clean = lambda sentence: re.sub(r"(?:\\+r)+|[^ \w.\\]+", "", sentence)
+
+def clean_job_description(df, df_column):
+    new_row = []
+    for row in df_column:
+        t = strip_tags(row)
+        t1 = t.replace('\\r','') 
+        t2 = t1.replace('\xa0',' ')
+        new_row.append(t2)
+        
+    
+    # Add updated Job Description column as new dataframe Column
+    df["JD"] = pd.DataFrame(new_row)
+    
+    return df
