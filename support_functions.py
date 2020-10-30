@@ -113,10 +113,11 @@ def strip_tags(html):
 def clean_job_description(df, df_column):
     new_row = []
     for row in df_column:
-        t = strip_tags(row)
-        t1 = t.replace('\\r','') 
-        t2 = t1.replace('\xa0',' ')
-        new_row.append(t2)
+        t = strip_tags(row) # Strip HTML tags using strig_tag() function
+        t1 = t.replace('\\r','') # Remove all "\\r" characters from text
+        t2 = t1.replace('\xa0',' ') # Remove all "\xa0" characters from text
+        t3 = t2.replace('\\n', '')
+        new_row.append(t3)
         
     
     # Add updated Job Description column as new dataframe Column
