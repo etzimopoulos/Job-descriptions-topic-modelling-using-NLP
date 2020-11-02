@@ -72,7 +72,8 @@ def show_entities(document):
 #        * Prints on screen top n words per topic
 def print_top_words(model, feature_names, n_top_words):
     for topic_idx, topic in enumerate(model.components_):
-        message = "Topic #%d: " % topic_idx
+#        print(f'THE TOP {n_top_words} WORDS FOR TOPIC #{topic_idx}')
+        message = "\nThe top %d words for topic #%d are:" % (n_top_words, topic_idx)
         message += " ".join([feature_names[i]
                              for i in topic.argsort()[:-n_top_words - 1:-1]])
         print(message)
@@ -121,6 +122,6 @@ def clean_job_description(df, df_column):
         
     
     # Add updated Job Description column as new dataframe Column
-    df["JD"] = pd.DataFrame(new_row)
+    df["Job Description"] = pd.DataFrame(new_row)
     
     return df
