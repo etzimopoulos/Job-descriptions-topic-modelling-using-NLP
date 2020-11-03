@@ -78,7 +78,14 @@ def print_top_words(model, feature_names, n_top_words):
                              for i in topic.argsort()[:-n_top_words - 1:-1]])
         print(message)
     print()
-        
+    
+    
+def return_top_words(model, feature_names, n_top_words):
+    t_topics = []
+    for topic_idx, topic in enumerate(model.components_):
+        t_topics[topic_idx].append([feature_names[i] for i in topic.argsort()[:-n_top_words - 1:-1]])
+    top_topics = pd.DataFrame(t_topics)
+    return top_topics
         
 
 # Source code from following link
